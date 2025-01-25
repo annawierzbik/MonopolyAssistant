@@ -232,7 +232,7 @@ const Game = () => {
 
 const App = () => {
   return (
-    <Router basename="/PZP1-PWA">
+    <Router>
       <div className="container">
         <Routes>
           <Route path="/" element={<GameList />} />
