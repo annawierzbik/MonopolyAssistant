@@ -1,0 +1,207 @@
+/* styles.css */
+
+/* General Body Styling */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #f0f4f8;
+  margin: 0;
+  padding: 0;
+  color: #2d3748;
+}
+
+#root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+/* Utility Classes */
+.container {
+  padding: 16px;
+  margin: auto;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  margin-top: 20px;
+  background-color: rgb(255, 101, 101);
+  height: 90%;
+  margin-left: 7%;
+  margin-right: 7%;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+.gameSetup {
+  display: flex;
+  flex-direction: column;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+button {
+  font-size: 16px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border-radius: 50px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.listA button {
+  font-size: 16px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border-radius: 50px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 100%;
+}
+
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Colorful Buttons */
+button.primary {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: white;
+}
+
+button.primary:hover {
+  background: linear-gradient(45deg, #2575fc, #6a11cb);
+}
+
+button.secondary {
+  background: linear-gradient(45deg, #ff6a00, #ee0979);
+  color: white;
+}
+
+button.secondary:hover {
+  background: linear-gradient(45deg, #ee0979, #ff6a00);
+}
+
+button.success {
+  background: linear-gradient(45deg, #43e97b, #38f9d7);
+  color: white;
+}
+
+button.success:hover {
+  background: linear-gradient(45deg, #38f9d7, #43e97b);
+}
+
+button.danger {
+  background: linear-gradient(45deg, #f857a6, #ff5858);
+  color: white;
+}
+
+button.danger:hover {
+  background: linear-gradient(45deg, #ff5858, #f857a6);
+}
+
+/* Input Fields */
+input {
+  width: 90%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 5px rgba(49, 130, 206, 0.5);
+}
+
+/* Game List */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-direction: column;
+}
+
+li {
+  background: #ffffff;
+  margin: 8px 0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+li:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: #3182ce;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.listA {
+  text-decoration: none;
+  color: #3182ce;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+a:hover {
+  text-decoration: underline;
+}
