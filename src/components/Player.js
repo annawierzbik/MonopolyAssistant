@@ -28,5 +28,9 @@ export default class Player {
       }
       return false;
     }
+
+    getRent(amount){
+      this.banace += amount;
+    }
   }
   

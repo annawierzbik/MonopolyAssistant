@@ -1,10 +1,32 @@
-/* App.css */
-.App {
-  text-align: center;
-  font-family: Arial, sans-serif;
+/* app.css */
+
+.app-container {
+  display: flex;
+  justify-content: space-between; /* Rozdziela elementy na dwie części */
+  padding: 20px;
 }
 
-h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+.left-panel {
+  width: 30%; /* Określamy szerokość panelu po lewej stronie */
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-right: 2px solid #ccc;
+}
+
+.right-panel {
+  width: 65%; /* Panel na resztę ekranu */
+  padding: 20px;
+}
+
+.left-panel h3 {
+  margin-top: 0;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  padding: 5px 0;
 }
