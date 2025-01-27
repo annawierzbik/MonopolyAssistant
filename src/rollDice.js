@@ -20,8 +20,6 @@ const rollDice = (diceResult, players, currentPlayerIndex, setPlayers, setCurren
     alert(`${currentPlayer.name} paid ${rent} in rent to ${owner.name}`);
   }
 
-  // Przechodzimy do następnego gracza
-  setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length); // Zmieniamy gracza
 };
 
 export default rollDice;

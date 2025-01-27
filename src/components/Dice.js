@@ -1,7 +1,6 @@
-// Dice.js
 import React, { useState } from 'react';
 
-const Dice = ({ rollDice }) => {
+const Dice = ({ rollDice, isDisabled }) => {
   const [dice, setDice] = useState([1, 1]);
 
   const roll = () => {
@@ -12,7 +11,7 @@ const Dice = ({ rollDice }) => {
 
   return (
     <div>
-      <button onClick={roll}>Roll Dice</button>
+      <button onClick={roll} disabled={isDisabled}>Roll Dice</button>
       <div>
         <p>Dice: {dice[0]} - {dice[1]}</p>
       </div>
