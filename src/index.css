@@ -1,13 +1,145 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+/* Resetowanie domyślnych stylów */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Tło całej aplikacji */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    flex-direction: column;
+  }
+  
+  /* Kontener dla planszy i panelu bocznego */
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 1200px;
+  }
+  
+  /* Plansza gry */
+  #board {
+    display: grid;
+    grid-template-columns: repeat(10, 100px);
+    grid-template-rows: repeat(10, 100px);
+    gap: 10px;
+    margin-right: 20px;
+  }
+  
+  /* Styl pojedynczego pola na planszy */
+  .tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 100%;
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Pola narożne (np. Go, Jail, Free Parking) */
+  .tile.corner {
+    background-color: #e4e4e4;
+  }
+  
+  /* Styl dla każdego gracza */
+  .sidebar {
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+  
+  /* Przycisk do rozpoczęcia gry */
+  button {
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Przycisk wyłączony */
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Styl dla informacji o graczu */
+  #player-info {
+    margin-bottom: 20px;
+  }
+  
+  #player-info div {
+    margin-bottom: 5px;
+  }
+  
+  /* Styl dla planszy z grami (z wyróżnieniem) */
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Podświetlenie aktywnego gracza */
+  .active-player {
+    background-color: #f0ad4e;
+    border: 2px solid #f0ad4e;
+    color: white;
+  }
+  
+  /* Dodanie stylu dla tabelki z graczami */
+  #player-info table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  #player-info table, #player-info th, #player-info td {
+    border: 1px solid #ddd;
+  }
+  
+  #player-info th, #player-info td {
+    padding: 8px;
+    text-align: center;
+  }
+  
+  #player-info th {
+    background-color: #f8f8f8;
+  }
+  
+  #player-info td {
+    background-color: #fff;
+  }
+  
+  /* Animacja dla planszy, która może być użyta przy zmianie gracza */
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+  }
+  
+  .shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
