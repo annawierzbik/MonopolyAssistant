@@ -72,29 +72,50 @@ const App = () => {
     setIsDiceDisabled(false); // Odblokowanie przycisku na koniec tury
   };
 
-  const renderPlayerProperties = () => {
-    const playerProperties = board.filter(space => space.owner === currentPlayer);
-
-    if (playerProperties.length === 0) {
-      return <p>{currentPlayer.name} doesn't own any properties.</p>;
-    }
-
+  const renderAllPlayersProperties = () => {
     return (
       <div>
-        <h3>{currentPlayer.name}'s Properties:</h3>
-        <ul>
-          {playerProperties.map((property, index) => (
-            <li key={index}>{property.name}</li>
-          ))}
-        </ul>
+        {players.map((player, index) => {
+          // Filtrujemy nieruchomości dla każdego gracza
+          const playerProperties = board.filter(space => space.owner === player);
+  
+          let positionClass = '';
+          if (player.name === 'Player 1') {
+            positionClass = 'top-left'; // Prawy górny róg
+          } else if (player.name === 'Player 2') {
+            positionClass = 'bottom-left'; // Lewy dolny róg
+          }
+          else if (player.name === 'Player 3') {
+            positionClass = 'bottom-left'; // Lewy dolny róg
+          }
+          else if (player.name === 'Player 4') {
+            positionClass = 'bottom-right'; // Lewy dolny róg
+          }
+  
+          return (
+            <div key={index} className={`player-properties ${positionClass}`}>
+              <h4>{player.name}'s Properties:</h4>
+              {playerProperties.length === 0 ? (
+                <p>{player.name} doesn't own any properties.</p>
+              ) : (
+                <ul>
+                  {playerProperties.map((property, idx) => (
+                    <li key={idx}>{property.name}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };
+  
 
   return (
     <div>
       <div>
-        {renderPlayerProperties()}
+        {renderAllPlayersProperties()}
       </div>
 
       <div>
