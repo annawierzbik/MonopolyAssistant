@@ -20,7 +20,7 @@ const Dice = ({ rollDice, isDisabled }) => {
         Roll dice
       </button>
       <div>
-        <p>Dice: {dice[0]} - {dice[1]}</p>
+        <p class="dice" >Dice: {dice[0]} - {dice[1]}</p>
       </div>
     </div>
   );

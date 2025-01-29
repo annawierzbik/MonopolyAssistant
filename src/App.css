@@ -86,6 +86,13 @@ input[type="text"]:focus, input[type="number"]:focus {
   transition: all 0.3s ease;
 }
 
+.dice{
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px; /* Odstęp między literami */
+  color: #fff; /* Kolor tekstu - biel */
+  font-size: 1.5rem;
+}
+
 @keyframes neon-flicker {
   0% {
     text-shadow: 
