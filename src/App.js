@@ -106,13 +106,13 @@ const App = () => {
           if (player.number === 1 ) {
             positionClass = 'top-left'; 
           } else if (player.number === 2) {
-            positionClass = 'bottom-left'; 
+            positionClass = 'top-left'; 
           }
           else if (player.name === 'Player 3') {
-            positionClass = 'bottom-left'; 
+            positionClass = 'bottom-right'; 
           }
           else if (player.name === 'Player 4') {
-            positionClass = 'bottom-right'; 
+            positionClass = 'bottom-left'; 
           }
 
           return (
