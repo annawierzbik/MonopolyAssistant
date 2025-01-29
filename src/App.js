@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import Dice from './components/Dice';
 import Player from './components/Player';
 import board from './boardValues';
+// import chance from "./chanceValues"; // Import szansy
 import PurchaseDialog from './components/PurchaseDialog';
+import ChanceDialog from "./components/ChanceDialog";
 import handlePurchase from './handlePurchase';
 import rollDice from './rollDice';
 import './App.css'; // Zdefiniuj style w oddzielnym pliku CSS
+import handleChance from "./handleChance";
 
 const App = () => {
   const [players, setPlayers] = useState([
@@ -17,28 +20,33 @@ const App = () => {
   const [skipDialog, setSkipDialog] = useState(false); // Stan dla skip dialogu
   const [currentProperty, setCurrentProperty] = useState(null);
   const [isDiceDisabled, setIsDiceDisabled] = useState(false); // Nowy stan do blokowania przycisku
+  const [chanceDialog, setChanceDialog] = useState(false);
+  const [chanceCard, setChanceCard] = useState(null);
 
   const currentPlayer = players[currentPlayerIndex];
   const currentSpace = board[currentPlayer.position];
 
-  const handleRollDice = (diceResult) => {
+   const handleRollDice = (diceResult) => {
     console.log("Dice rolled:", diceResult);
-
-    // Blokujemy przycisk na czas pokazania dialogu
     setIsDiceDisabled(true);
 
-    // Wywołanie funkcji rollDice z nowym parametrem setSkipDialog
     rollDice(
-      diceResult, 
-      players, 
-      currentPlayerIndex, 
-      setPlayers, 
-      setCurrentPlayerIndex, 
-      setPurchaseDialog, 
-      setCurrentProperty, 
-      setSkipDialog,  // Przekazywanie setSkipDialog
-      board
+      diceResult,
+      players,
+      currentPlayerIndex,
+      setPlayers,
+      setCurrentPlayerIndex,
+      setPurchaseDialog,
+      setCurrentProperty,
+      setSkipDialog,
+      board,
+      setChanceDialog,
+      setChanceCard
     );
+  };
+
+  const handleChanceClose = () => {
+    handleChance(chanceCard, players, currentPlayerIndex, setPlayers, setChanceDialog, setChanceCard, setIsDiceDisabled, board);
   };
 
   const nextPlayer = () => {
@@ -72,7 +80,7 @@ const App = () => {
       <div className="left-panel">
         {renderPlayerProperties()}
       </div>
-
+  
       {/* Kontener na treści po prawej stronie */}
       <div className="right-panel">
         <h1>Monopoly Game</h1>
@@ -80,13 +88,12 @@ const App = () => {
         <h3>Current Space: {currentSpace.name}</h3>
         <p>Balance: ${currentPlayer.balance}</p>
         <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
-
-        {/* Dodanie stanu isDiceDisabled do komponentu Dice */}
+  
         <Dice
           rollDice={handleRollDice}
           isDisabled={isDiceDisabled} // Blokowanie przycisku na podstawie isDiceDisabled
         />
-
+  
         {/* Dialog zakupu nieruchomości */}
         {purchaseDialog && (
           <PurchaseDialog
@@ -102,15 +109,18 @@ const App = () => {
             }}
           />
         )}
-
+  
+        {/* Dialog kart szansy */}
+        {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
+  
         {/* Dialog przejścia do kolejnego gracza */}
-        {skipDialog && isDiceDisabled && !purchaseDialog && (
+        {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && (
           <div>
             <h3>Do you want to move on to the next player?</h3>
             <button
               onClick={() => {
                 setSkipDialog(false);
-                nextPlayer(); // Zmiana gracza po przejściu dalej
+                nextPlayer();
               }}
             >
               Yes, move on!
@@ -120,6 +130,7 @@ const App = () => {
       </div>
     </div>
   );
+  
 };
 
 export default App;

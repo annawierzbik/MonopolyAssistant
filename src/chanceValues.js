@@ -75,6 +75,8 @@ const chance = [
     {
       "title": "Your building loan matures - Collect $150",
       "action": "addfunds",
-      "amount": 50
+      "amount": 150
     }
   ];
+
+  export default chance;
