@@ -1,32 +1,167 @@
 /* app.css */
 
+/* Ogólny reset stylów */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Tło i ogólny wygląd */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Kontener główny */
 .app-container {
   display: flex;
-  justify-content: space-between; /* Rozdziela elementy na dwie części */
+  justify-content: flex-start;
+  margin: 20px;
   padding: 20px;
+  height: 100vh;
+  align-items: center;
 }
 
+/* Lewa część - Posiadłości */
 .left-panel {
-  width: 30%; /* Określamy szerokość panelu po lewej stronie */
-  background-color: #f4f4f4;
-  padding: 10px;
-  border-right: 2px solid #ccc;
+  width: 250px; /* Wąska lista */
+  padding: 15px;
+  background-color: #1d1f2f;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 20px; /* Odstęp od prawego panelu */
+  height: 50%; /* Wypełnia całą wysokość kontenera */
 }
 
-.right-panel {
-  width: 65%; /* Panel na resztę ekranu */
-  padding: 20px;
-}
-
+/* Tytuł posiadłości */
 .left-panel h3 {
-  margin-top: 0;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
 }
 
-ul {
+/* Lista posiadłości gracza */
+.left-panel ul {
   list-style-type: none;
   padding-left: 0;
 }
 
-li {
-  padding: 5px 0;
+.left-panel ul li {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+/* Prawa część - Informacje o grze */
+.right-panel {
+  flex-grow: 1; /* Zajmuje pozostałą przestrzeń */
+  padding: 20px;
+  background-color: #d92d2d;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px; /* Maksymalna szerokość */
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto; /* Wyśrodkowanie w poziomie */
+  z-index: 10; /* Upewniamy się, że ten panel będzie na wierzchu */
+}
+
+/* Tytuł gry */
+.title-container h1 {
+  font-size: 2rem;
+  color: #1d1f2f;
+  margin-top: 10px;
+}
+
+.title-container h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Informacje o grze */
+.current-info h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.current-info p {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+/* Przyciski (w tym te w dialogu zakupu) */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #b5b5b5;
+  cursor: not-allowed;
+}
+
+/* Dialog zakupu nieruchomości */
+.purchase-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 10;
+}
+
+.purchase-dialog p {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+/* Styl dla komunikatów i przycisków w dialogu przejścia */
+.skip-dialog {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+.skip-dialog button {
+  margin-top: 10px;
+  font-size: 1rem;
+  padding: 12px 25px;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 5px;
+}
+
+.skip-dialog button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .left-panel, .right-panel {
+    width: 90%;
+    margin: 10px 0;
+  }
 }

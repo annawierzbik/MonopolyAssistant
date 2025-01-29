@@ -68,18 +68,24 @@ const App = () => {
 
   return (
     <div className="app-container">
-      {/* Kontener na posiadłości po lewej stronie */}
+      {/* Lewa część - Posiadłości */}
       <div className="left-panel">
         {renderPlayerProperties()}
       </div>
-
-      {/* Kontener na treści po prawej stronie */}
+      
+      <div className="title-container">
+          <h1>Monopoly Game</h1>
+        </div>
+      
+      {/* Kontener na informacje o grze i dialogi */}
       <div className="right-panel">
-        <h1>Monopoly Game</h1>
-        <h2>Current Player: {currentPlayer.name}</h2>
-        <h3>Current Space: {currentSpace.name}</h3>
-        <p>Balance: ${currentPlayer.balance}</p>
-        <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
+
+        <div className="current-info">
+          <h3>Current Player: {currentPlayer.name}</h3>
+          <h3>Current Space: {currentSpace.name}</h3>
+          <p>Balance: ${currentPlayer.balance}</p>
+          <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
+        </div>
 
         {/* Dodanie stanu isDiceDisabled do komponentu Dice */}
         <Dice
@@ -105,7 +111,7 @@ const App = () => {
 
         {/* Dialog przejścia do kolejnego gracza */}
         {skipDialog && isDiceDisabled && !purchaseDialog && (
-          <div>
+          <div className="skip-dialog">
             <h3>Do you want to move on to the next player?</h3>
             <button
               onClick={() => {
