@@ -1,44 +1,133 @@
 /* app.css */
-
-.app-container {
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
   display: flex;
-  justify-content: space-between; /* Rozdziela elementy na dwie części */
-  padding: 20px;
+  justify-content: center;
+  background: linear-gradient(135deg, #060264, #05042c, #05073b); /* Gradient z ciemnych odcieni */
+  font-family: 'Orbitron', sans-serif;
 }
 
-.left-panel {
-  width: 30%; /* Określamy szerokość panelu po lewej stronie */
-  background-color: #f4f4f4;
+.App {
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+}
+
+
+.title {
+  top: 20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 4rem; /* Rozmiar czcionki */
+  color: #fff; /* Kolor tekstu - biel */
+  text-transform: uppercase; /* Duże litery */
+  letter-spacing: 2px; /* Odstęp między literami */
+  text-shadow: 
+    0 0 5px rgba(255, 255, 255, 0.8), 
+    0 0 10px rgba(255, 255, 255, 0.7),
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 40px rgba(255, 0, 150, 0.8), /* Neonowy efekt - kolor różowy */
+    0 0 60px rgba(255, 0, 150, 0.9),
+    0 0 80px rgba(255, 0, 150, 1);
+  animation: neon-flicker 1.5s infinite alternate; /* Efekt migotania */
+  margin-bottom: 150px;
+}
+
+.game-info{
+  top: 100px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px; /* Odstęp między literami */
+  color: #fff; /* Kolor tekstu - biel */
+  font-size: 2rem;
+}
+
+.dialog{
+  top: 100px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px; /* Odstęp między literami */
+  color: #fff; /* Kolor tekstu - biel */
+  font-size: 1.5rem;
+}
+
+.start-text{
+  margin-top: 100px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px; /* Odstęp między literami */
+  color: #fff; /* Kolor tekstu - biel */
+  font-size: 2.5rem;
+}
+
+input[type="text"], input[type="number"] {
   padding: 10px;
-  border-right: 2px solid #ccc;
+  font-size: 2rem;
+  font-family: 'Orbitron', sans-serif;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #100e0e64;
+  color: #fbfbfb;
+  width: 200px; /* Możesz zmieniać szerokość według potrzeb */
+  margin: 10px 0;
+  transition: all 0.3s ease;
 }
 
-.right-panel {
-  width: 65%; /* Panel na resztę ekranu */
-  padding: 20px;
+/* Stylizacja inputów na focus */
+input[type="text"]:focus, input[type="number"]:focus {
+  padding: 10px;
+  font-size: 2rem;
+  font-family: 'Orbitron', sans-serif;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #100e0e64;
+  color: #fbfbfb;
+  width: 200px; /* Możesz zmieniać szerokość według potrzeb */
+  margin: 10px 0;
+  transition: all 0.3s ease;
 }
 
-.left-panel h3 {
-  margin-top: 0;
-}
-
-ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-li {
-  padding: 5px 0;
+@keyframes neon-flicker {
+  0% {
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.8), 
+      0 0 10px rgba(255, 255, 255, 0.7),
+      0 0 20px rgba(255, 255, 255, 0.6),
+      0 0 40px rgba(255, 0, 150, 0.8),
+      0 0 60px rgba(255, 0, 150, 0.9),
+      0 0 80px rgba(255, 0, 150, 1);
+  }
+  50% {
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.6), 
+      0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.4),
+      0 0 40px rgba(255, 0, 150, 0.6),
+      0 0 60px rgba(255, 0, 150, 0.7),
+      0 0 80px rgba(255, 0, 150, 0.8);
+  }
+  100% {
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.8), 
+      0 0 10px rgba(255, 255, 255, 0.7),
+      0 0 20px rgba(255, 255, 255, 0.6),
+      0 0 40px rgba(255, 0, 150, 0.8),
+      0 0 60px rgba(255, 0, 150, 0.9),
+      0 0 80px rgba(255, 0, 150, 1);
+  }
 }
 
 .player-properties {
   position: fixed;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1px solid #ccc;
+  background-color: rgba(0, 0, 0, 0.6); /* Ciemne przezroczyste tło */
+  border: 2px solid #ff14ff; /* Neonowy zielony kolor brzegów */
   border-radius: 8px;
   z-index: 10;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 20, 235, 0.8), 0 0 20px rgba(57, 255, 20, 0.8); /* Neonowy efekt świecenia na brzegach */
+  backdrop-filter: blur(5px); /* Efekt rozmycia tła za elementem */
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px; /* Odstęp między literami */
+  color: #fff;
 }
 
 .top-left {
@@ -60,4 +149,100 @@ li {
   bottom: 20px;
   right: 20px;
 }
+
+.neon-button {
+  font-family: 'Orbitron', sans-serif; /* Użyj czcionki orbitron dla stylu futurystycznego */
+  padding: 15px 30px;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  background-color: #111;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  margin-top: 50px;
+}
+
+.neon-button-small{
+  font-family: 'Orbitron', sans-serif; /* Użyj czcionki orbitron dla stylu futurystycznego */
+  padding: 15px 30px;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  background-color: #111;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  margin-top: 50px;
+  box-shadow: 0 0 20px rgba(255, 0, 150, 0.7), 0 0 30px rgba(255, 0, 150, 0.6), 0 0 40px rgba(255, 0, 150, 0.5);
+}
+
+.neon-button-small:hover {
+  transform: scale(1.1);
+  background-color: #222;
+  box-shadow: 0 0 20px rgba(255, 0, 150, 0.7), 0 0 30px rgba(255, 0, 150, 0.6), 0 0 40px rgba(255, 0, 150, 0.5);
+}
+
+
+.neon-button:hover {
+  background-color: #222;
+  box-shadow: 0 0 20px rgba(255, 0, 150, 0.7), 0 0 30px rgba(255, 0, 150, 0.6), 0 0 40px rgba(255, 0, 150, 0.5);
+}
+
+.neon-button:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background-color: rgba(255, 0, 150, 0.5);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  transition: width 0.4s, height 0.4s;
+  transform: translate(-50%, -50%);
+}
+
+.neon-button:hover:before {
+  width: 400%;
+  height: 400%;
+}
+
+.neon-button.disabled {
+  background-color: #272222; /* Ciemniejsze tło */
+  cursor: not-allowed; /* Zmienia kursor na 'not-allowed' */
+  box-shadow: none; /* Usuwa efekt świetlny */
+}
+
+.neon-button.disabled:before {
+  cursor: not-allowed; /* Zmienia kursor na 'not-allowed' */
+  box-shadow: none; /* Usuwa efekt świetlny */
+  animation: none;
+  background-color: #27222248;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+}
+
+
 

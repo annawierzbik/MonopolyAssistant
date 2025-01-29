@@ -12,7 +12,13 @@ const Dice = ({ rollDice, isDisabled }) => {
 
   return (
     <div>
-      <button onClick={roll} disabled={isDisabled}>Roll Dice</button>
+      <button 
+        className={`neon-button ${isDisabled ? 'disabled' : ''}`} 
+        onClick={roll} 
+        disabled={isDisabled}
+      >
+        Roll dice
+      </button>
       <div>
         <p>Dice: {dice[0]} - {dice[1]}</p>
       </div>

@@ -96,7 +96,7 @@ const App = () => {
     setIsDiceDisabled(false); // Odblokowanie przycisku na koniec tury
   };
 
-  const renderAllPlayersProperties = () => {
+  const renderAllPlayersInfo = () => {
     return (
       <div>
         {players.map((player, index) => {
@@ -127,7 +127,9 @@ const App = () => {
                   ))}
                 </ul>
               )}
+              <h4>{player.name}'s Balance: {player.balance}</h4>
             </div>
+    
           );
         })}
       </div>
@@ -138,7 +140,7 @@ const App = () => {
     <div>
       {!gameStarted ? (
         <div>
-          <h3>Enter Number of Players:</h3>
+          <div class="start-text">Enter Number of Players:</div>
           <input 
             type="number" 
             value={numPlayers} 
@@ -147,7 +149,7 @@ const App = () => {
             max="4"
           />
           <div>
-            <h3>Enter Player Names:</h3>
+            <div class="start-text">Enter Player Names:</div>
             {Array.from({ length: numPlayers }).map((_, index) => (
               <div key={index}>
                 <input
@@ -159,20 +161,19 @@ const App = () => {
               </div>
             ))}
           </div>
-          <button onClick={handleAddPlayers}>Start Game</button>
+          <button class="neon-button" onClick={handleAddPlayers}>Start Game</button>
         </div>
       ) : (
         <div>
           <div>
-            {renderAllPlayersProperties()}
+            {renderAllPlayersInfo()}
           </div>
 
           <div>
-            <h1>Monopoly Game</h1>
-            <h2>Current Player: {currentPlayer.name}</h2>
-            <h3>Current Space: {currentSpace.name}</h3>
-            <p>Balance: ${currentPlayer.balance}</p>
-            <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
+            <div class = "title">Monopoly Game</div>
+            <div class="game-info">Current Player: {currentPlayer.name}</div>
+            <div class="game-info">Current Space: {currentSpace.name}</div>
+            <div class='game-info'>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</div>
 
             <Dice
               rollDice={handleRollDice}
@@ -198,9 +199,9 @@ const App = () => {
             
             {taxDialog && (
               <div>
-                <h3>You need to pay {currentSpace.cost}$</h3>
-                <h3>Do you want to move on to the next player?</h3>
-                <button
+                <div class="dialog">You need to pay {currentSpace.cost}$</div>
+                <div class="dialog">Do you want to move on to the next player?</div>
+                <button class="neon-button-small"
                   onClick={() => {
                     console.log(`${currentPlayer.name} is moving on to the next player.`);
                     setTaxDialog(false);
@@ -215,8 +216,8 @@ const App = () => {
             {jailDialog && (
               <div>
                 <JailDialog />
-                <h3>Do you want to move on to the next player?</h3>
-                <button
+                <div class="dialog">Do you want to move on to the next player?</div>
+                <button class="neon-button-small"
                   onClick={() => {
                     console.log(`${currentPlayer.name} is moving on to the next player.`);
                     setJailDialog(false);
@@ -243,8 +244,8 @@ const App = () => {
 
             {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog &&(
               <div>
-                <h3>Do you want to move on to the next player?</h3>
-                <button
+                <div class="dialog">Do you want to move on to the next player?</div>
+                <button class="neon-button-small"
                   onClick={() => {
                     console.log(`${currentPlayer.name} is skipping to the next player.`);
                     setSkipDialog(false);

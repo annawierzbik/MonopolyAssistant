@@ -7,7 +7,7 @@ const ChanceDialog = ({ chanceCard, onClose }) => {
     <div className="dialog">
       <h2>Chance Card</h2>
       <p>{chanceCard.title}</p>
-      <button onClick={onClose}>OK</button>
+      <button class="neon-button-small" onClick={onClose}>OK</button>
     </div>
   );
 };
