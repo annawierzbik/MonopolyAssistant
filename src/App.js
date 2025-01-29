@@ -6,6 +6,7 @@ import board from './boardValues';
 import PurchaseDialog from './components/PurchaseDialog';
 import ChanceDialog from "./components/ChanceDialog";
 import JailDialog from "./components/JailDialog";
+import GetOutOfJailDialog from "./components/GetOutOfJailDialog";
 import handlePurchase from './handlePurchase';
 import rollDice from './rollDice';
 import './App.css'; // Zdefiniuj style w oddzielnym pliku CSS
@@ -24,11 +25,12 @@ const App = () => {
   const [chanceDialog, setChanceDialog] = useState(false);
   const [chanceCard, setChanceCard] = useState(null);
   const [jailDialog, setJailDialog] = useState(false);
+  const [getOutOfJailDialog, setGetOutOfJailDialog] = useState(false);
 
   const currentPlayer = players[currentPlayerIndex];
   const currentSpace = board[currentPlayer.position];
 
-   const handleRollDice = (diceResult) => {
+  const handleRollDice = (diceResult) => {
     console.log("Dice rolled:", diceResult);
     setIsDiceDisabled(true);
 
@@ -44,7 +46,8 @@ const App = () => {
       board,
       setChanceDialog,
       setChanceCard,
-      setJailDialog
+      setJailDialog,
+      setGetOutOfJailDialog
     );
   };
 
@@ -53,12 +56,20 @@ const App = () => {
     nextPlayer();
   };
 
+  const handleGetOutOfJail = () => {
+    console.log(`${currentPlayer.name} is using a "Get Out of Jail" card.`);
+    currentPlayer.inJail = false;
+    currentPlayer.hasJailCard = false;
+    setGetOutOfJailDialog(false);
+    setIsDiceDisabled(false);
+  };
+
   const nextPlayer = () => {
+    console.log(`Switching to the next player.`);
     setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length);
     setIsDiceDisabled(false); // Odblokowanie przycisku na koniec tury
   };
 
-  // Funkcja do wyświetlania posiadłości gracza
   const renderPlayerProperties = () => {
     const playerProperties = board.filter(space => space.owner === currentPlayer);
 
@@ -80,49 +91,46 @@ const App = () => {
 
   return (
     <div className="app-container">
-      {/* Kontener na posiadłości po lewej stronie */}
       <div className="left-panel">
         {renderPlayerProperties()}
       </div>
-  
-      {/* Kontener na treści po prawej stronie */}
+
       <div className="right-panel">
         <h1>Monopoly Game</h1>
         <h2>Current Player: {currentPlayer.name}</h2>
         <h3>Current Space: {currentSpace.name}</h3>
         <p>Balance: ${currentPlayer.balance}</p>
         <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
-  
+
         <Dice
           rollDice={handleRollDice}
-          isDisabled={isDiceDisabled} // Blokowanie przycisku na podstawie isDiceDisabled
+          isDisabled={isDiceDisabled} 
         />
-  
-        {/* Dialog zakupu nieruchomości */}
+
         {purchaseDialog && (
           <PurchaseDialog
             property={currentProperty}
             onPurchase={(purchase) => {
               handlePurchase(purchase, players, currentPlayerIndex, currentProperty, setPlayers, setPurchaseDialog, setCurrentProperty);
-              nextPlayer(); // Zmiana gracza po zakończeniu zakupu
+              nextPlayer();
             }}
             onCancel={() => {
               setPurchaseDialog(false);
               setCurrentProperty(null);
-              nextPlayer(); // Zmiana gracza po anulowaniu zakupu
+              nextPlayer();
             }}
           />
         )}
-  
-        {/* Dialog kart szansy */}
+
         {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
         
         {jailDialog && (
           <div>
-            <JailDialog> </JailDialog>
+            <JailDialog />
             <h3>Do you want to move on to the next player?</h3>
             <button
               onClick={() => {
+                console.log(`${currentPlayer.name} is moving on to the next player.`);
                 setJailDialog(false);
                 nextPlayer();
               }}
@@ -131,13 +139,26 @@ const App = () => {
             </button>
           </div>
         )}
-  
-        {/* Dialog przejścia do kolejnego gracza */}
+
+        {getOutOfJailDialog && (
+          <GetOutOfJailDialog
+            onUseCard={() => {
+              handleGetOutOfJail();
+            }}
+            onStay={() => {
+              console.log(`${currentPlayer.name} chose to stay in jail.`);
+              setGetOutOfJailDialog(false);
+              nextPlayer();
+            }}
+          />
+        )}
+
         {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog &&(
           <div>
             <h3>Do you want to move on to the next player?</h3>
             <button
               onClick={() => {
+                console.log(`${currentPlayer.name} is skipping to the next player.`);
                 setSkipDialog(false);
                 nextPlayer();
               }}
@@ -149,7 +170,6 @@ const App = () => {
       </div>
     </div>
   );
-  
 };
 
 export default App;

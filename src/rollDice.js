@@ -12,43 +12,70 @@ const rollDice = (
   board,
   setChanceDialog,
   setChanceCard,
-  setJailDialog
+  setJailDialog,
+  setGetOutOfJailDialog
 ) => {
   const currentPlayer = players[currentPlayerIndex];
   const steps = diceResult[0] + diceResult[1];
-  currentPlayer.move(steps);
 
-  const currentSpace = board[currentPlayer.position];
+  console.log(`${currentPlayer.name} rolls the dice: ${diceResult[0]} + ${diceResult[1]} = ${steps} steps`);
 
-  if(currentPlayer.inJail){
-    currentPlayer.inJail = false;
-    setJailDialog(true);
+  if (currentPlayer.inJail) {
+    console.log(`${currentPlayer.name} is in jail. Moving to jail exit...`);
+    console.log(`${currentPlayer.hasJailCard} has jail card value`);
+    if(currentPlayer.hasJailCard){
+      console.log(`${currentPlayer.name} has jail card`);
+      setGetOutOfJailDialog(true);
+      currentPlayer.inJail = false;
+    }
+    else{
+      currentPlayer.inJail = false;
+      setJailDialog(true); // Prompt to move out of jail
+      console.log(`${currentPlayer.name} is no longer in jail.`);
+    }
+  } else {
+    console.log(`${currentPlayer.name} moves ${steps} steps.`);
+    currentPlayer.move(steps); // Move player based on dice roll
   }
 
+  const currentSpace = board[currentPlayer.position];
+  console.log(`${currentPlayer.name} is now on space: ${currentSpace.name} (Type: ${currentSpace.type})`);
+
   if (currentSpace.type === "property" && !currentSpace.owner) {
+    console.log(`${currentSpace.name} is available for purchase.`);
     setCurrentProperty(currentSpace);
-    setPurchaseDialog(true);
+    setPurchaseDialog(true); // Trigger purchase dialog
   } else if (currentSpace.type === "property" && currentSpace.owner !== currentPlayer) {
     const owner = currentSpace.owner;
     const rent = currentSpace.rent[0];
+    console.log(`${currentPlayer.name} owes rent of ${rent} to ${owner.name}`);
 
     if (!currentPlayer.payRent(rent)) {
+      console.log(`${currentPlayer.name} doesn't have enough money to pay rent.`);
       alert(`Not enough money to pay rent! ${currentPlayer.name} lost`);
     } else {
       owner.getRent(rent);
+      console.log(`${currentPlayer.name} paid ${rent} in rent to ${owner.name}`);
       alert(`${currentPlayer.name} paid ${rent} in rent to ${owner.name}`);
     }
 
     setSkipDialog(true);
-    } else if (currentSpace.type === "chance") {
-      const drawnCard = chance[Math.floor(Math.random() * chance.length)]; 
-      //const drawnCard = chance[8]; // Draw a random Chance card
-      setChanceCard(drawnCard);
-      setChanceDialog(true); // Show the Chance card dialog
-    
-      // Wait for the player to close the dialog before applying the effect
-      return;
-    } else {
+  } else if (currentSpace.type === "chance") {
+    const randomIndex = Math.random() < 0.5 ? 6 : 8;
+    const drawnCard = chance[randomIndex]; // Draw a random Chance card
+    console.log(`Chance card drawn: ${drawnCard.description}`);
+    setChanceCard(drawnCard);
+    setChanceDialog(true); // Show the Chance card dialog
+    return;
+  } else if (currentSpace.type === "go-to-jail") {
+    console.log(`${currentPlayer.name} landed on Go to Jail. Moving to Jail...`);
+    alert("Go to Jail");
+    currentPlayer.inJail = true;
+    currentPlayer.position = 10; // Move player to Jail
+    console.log(`${currentPlayer.name} is now in jail.`);
+    setSkipDialog(true);
+  } else {
+    console.log(`${currentPlayer.name} ends their turn.`);
     setSkipDialog(true);
   }
 };

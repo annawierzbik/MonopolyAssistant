@@ -6,6 +6,7 @@ export default class Player {
       this.position = 0;  // Pozycja gracza na planszy
       this.properties = [];  // Lista posiadanych nieruchomości
       this.inJail = false;
+      this.hasJailCard = false;
     }
   
     move(steps) {

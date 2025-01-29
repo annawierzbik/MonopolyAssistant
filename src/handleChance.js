@@ -74,7 +74,8 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
           currentPlayer.sendToJail();
           alert(`${currentPlayer.name} is sent to Jail!`);
         } else if (chanceCard.subaction === "getout") {
-          currentPlayer.hasGetOutOfJailCard = true;
+          currentPlayer.hasJailCard = true;
+          console.log("Jail card ")
           alert(`${currentPlayer.name} received a Get Out of Jail Free card!`);
         }
         break;
