@@ -47,6 +47,7 @@ const App = () => {
 
   const handleChanceClose = () => {
     handleChance(chanceCard, players, currentPlayerIndex, setPlayers, setChanceDialog, setChanceCard, setIsDiceDisabled, board);
+    nextPlayer();
   };
 
   const nextPlayer = () => {

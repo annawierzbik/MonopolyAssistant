@@ -24,7 +24,7 @@ const rollDice = (
     setPurchaseDialog(true);
   } else if (currentSpace.type === "property" && currentSpace.owner !== currentPlayer) {
     const owner = currentSpace.owner;
-    const rent = currentSpace.cost / 10;
+    const rent = currentSpace.rent[0];
 
     if (!currentPlayer.payRent(rent)) {
       alert(`Not enough money to pay rent! ${currentPlayer.name} lost`);
