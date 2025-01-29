@@ -42,13 +42,28 @@ const rollDice = (
   const currentSpace = board[currentPlayer.position];
   console.log(`${currentPlayer.name} is now on space: ${currentSpace.name} (Type: ${currentSpace.type})`);
 
-  if (currentSpace.type === "property" && !currentSpace.owner) {
+  if ((currentSpace.type === "property" || currentSpace.type === "railroad" || currentSpace.type === "utility") && !currentSpace.owner) {
     console.log(`${currentSpace.name} is available for purchase.`);
     setCurrentProperty(currentSpace);
     setPurchaseDialog(true); // Trigger purchase dialog
-  } else if (currentSpace.type === "property" && currentSpace.owner !== currentPlayer) {
+  } else if ((currentSpace.type === "property" || currentSpace.type === "railroad" || currentSpace.type === "utility") && currentSpace.owner !== currentPlayer) {
     const owner = currentSpace.owner;
-    const rent = currentSpace.rent[0];
+    let rent = 0;
+    if(currentSpace.type === "property"){
+      rent = currentSpace.rent;
+    }
+    else if(currentSpace.type === "railroad"){
+      rent = owner.railroadCount * 25;
+    }
+    else{
+      console.log(`utility count ${owner.utilityCount}`)
+      if(owner.utilityCount === 1){
+        rent = steps * 4;
+      }
+      else{
+        rent = steps * 10;
+      }
+    }
     console.log(`${currentPlayer.name} owes rent of ${rent} to ${owner.name}`);
 
     if (!currentPlayer.pay(rent)) {

@@ -7,6 +7,8 @@ export default class Player {
       this.properties = [];  // Lista posiadanych nieruchomości
       this.inJail = false;
       this.hasJailCard = false;
+      this.railroadCount = 0;
+      this.utilityCount = 0;
     }
   
     move(steps) {
@@ -17,6 +19,12 @@ export default class Player {
       if (this.balance >= property.cost) {
         this.balance -= property.cost;
         this.properties.push(property);
+        if(property.type === "railroad"){
+          this.railroadCount += 1;
+        }
+        else if (property.type === "utility"){
+          this.utilityCount += 1;
+        }
         property.owner = this;
         return true;
       }

@@ -5,7 +5,7 @@ const Dice = ({ rollDice, isDisabled }) => {
 
   const roll = () => {
     //const rollResult = [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
-    const rollResult = [1, 3];
+    const rollResult = [6, 6];
     setDice(rollResult);
     rollDice(rollResult);  // Przekazujemy wynik rzutu z powrotem do App.js
   };
