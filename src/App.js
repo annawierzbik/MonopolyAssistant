@@ -92,12 +92,12 @@ const App = () => {
   };
 
   return (
-    <div className="app-container">
-      <div className="left-panel">
+    <div>
+      <div>
         {renderPlayerProperties()}
       </div>
 
-      <div className="right-panel">
+      <div>
         <h1>Monopoly Game</h1>
         <h2>Current Player: {currentPlayer.name}</h2>
         <h3>Current Space: {currentSpace.name}</h3>

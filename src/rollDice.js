@@ -77,9 +77,9 @@ const rollDice = (
     setSkipDialog(true);
 
   } else if (currentSpace.type === "chance") {
-    //const randomIndex = Math.random() < 0.5 ? 6 : 8;
-    const randomIndex = 4;
-    const drawnCard = chance[randomIndex]; // Draw a random Chance card
+    const drawnCard = chance[Math.floor(Math.random() * chance.length)]; // Draw a random Chance card
+    //const randomIndex = 4;
+    //const drawnCard = chance[randomIndex]; // Draw a random Chance card
     console.log(`Chance card drawn: ${drawnCard.description}`);
     setChanceCard(drawnCard);
     setChanceDialog(true); // Show the Chance card dialog
