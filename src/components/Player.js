@@ -5,6 +5,7 @@ export default class Player {
       this.balance = balance;  // Saldo gracza
       this.position = 0;  // Pozycja gracza na planszy
       this.properties = [];  // Lista posiadanych nieruchomości
+      this.inJail = false;
     }
   
     move(steps) {
@@ -31,6 +32,11 @@ export default class Player {
 
     getRent(amount){
       this.banace += amount;
+    }
+
+    sendToJail(){
+        this.position = 10;
+        this.inJail = true;
     }
   }
   

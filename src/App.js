@@ -5,6 +5,7 @@ import board from './boardValues';
 // import chance from "./chanceValues"; // Import szansy
 import PurchaseDialog from './components/PurchaseDialog';
 import ChanceDialog from "./components/ChanceDialog";
+import JailDialog from "./components/JailDialog";
 import handlePurchase from './handlePurchase';
 import rollDice from './rollDice';
 import './App.css'; // Zdefiniuj style w oddzielnym pliku CSS
@@ -22,6 +23,7 @@ const App = () => {
   const [isDiceDisabled, setIsDiceDisabled] = useState(false); // Nowy stan do blokowania przycisku
   const [chanceDialog, setChanceDialog] = useState(false);
   const [chanceCard, setChanceCard] = useState(null);
+  const [jailDialog, setJailDialog] = useState(false);
 
   const currentPlayer = players[currentPlayerIndex];
   const currentSpace = board[currentPlayer.position];
@@ -41,7 +43,8 @@ const App = () => {
       setSkipDialog,
       board,
       setChanceDialog,
-      setChanceCard
+      setChanceCard,
+      setJailDialog
     );
   };
 
@@ -113,9 +116,24 @@ const App = () => {
   
         {/* Dialog kart szansy */}
         {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
+        
+        {jailDialog && (
+          <div>
+            <JailDialog> </JailDialog>
+            <h3>Do you want to move on to the next player?</h3>
+            <button
+              onClick={() => {
+                setJailDialog(false);
+                nextPlayer();
+              }}
+            >
+              Yes, move on!
+            </button>
+          </div>
+        )}
   
         {/* Dialog przejścia do kolejnego gracza */}
-        {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && (
+        {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog &&(
           <div>
             <h3>Do you want to move on to the next player?</h3>
             <button

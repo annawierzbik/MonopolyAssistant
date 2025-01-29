@@ -11,13 +11,19 @@ const rollDice = (
   setSkipDialog,
   board,
   setChanceDialog,
-  setChanceCard
+  setChanceCard,
+  setJailDialog
 ) => {
   const currentPlayer = players[currentPlayerIndex];
   const steps = diceResult[0] + diceResult[1];
   currentPlayer.move(steps);
 
   const currentSpace = board[currentPlayer.position];
+
+  if(currentPlayer.inJail){
+    currentPlayer.inJail = false;
+    setJailDialog(true);
+  }
 
   if (currentSpace.type === "property" && !currentSpace.owner) {
     setCurrentProperty(currentSpace);
@@ -35,7 +41,8 @@ const rollDice = (
 
     setSkipDialog(true);
     } else if (currentSpace.type === "chance") {
-      const drawnCard = chance[Math.floor(Math.random() * chance.length)]; // Draw a random Chance card
+      const drawnCard = chance[Math.floor(Math.random() * chance.length)]; 
+      //const drawnCard = chance[8]; // Draw a random Chance card
       setChanceCard(drawnCard);
       setChanceDialog(true); // Show the Chance card dialog
     

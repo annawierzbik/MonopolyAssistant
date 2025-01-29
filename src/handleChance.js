@@ -68,17 +68,17 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         alert(`${currentPlayer.name} paid $${totalCharge} for property repairs.`);
         break;
   
-    /*
+    
       case "jail":
         if (chanceCard.subaction === "goto") {
-          currentPlayer.position = board.find(tile => tile.type === "jail").id;
+          currentPlayer.sendToJail();
           alert(`${currentPlayer.name} is sent to Jail!`);
         } else if (chanceCard.subaction === "getout") {
           currentPlayer.hasGetOutOfJailCard = true;
           alert(`${currentPlayer.name} received a Get Out of Jail Free card!`);
         }
         break;
-        */
+        
       default:
         alert("Unknown Chance Card action.");
     }
