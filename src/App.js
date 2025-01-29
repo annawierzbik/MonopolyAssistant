@@ -2,34 +2,58 @@ import React, { useState } from 'react';
 import Dice from './components/Dice';
 import Player from './components/Player';
 import board from './boardValues';
-// import chance from "./chanceValues"; // Import szansy
 import PurchaseDialog from './components/PurchaseDialog';
-import ChanceDialog from "./components/ChanceDialog";
-import JailDialog from "./components/JailDialog";
-import GetOutOfJailDialog from "./components/GetOutOfJailDialog";
+import ChanceDialog from './components/ChanceDialog';
+import JailDialog from './components/JailDialog';
+import GetOutOfJailDialog from './components/GetOutOfJailDialog';
 import handlePurchase from './handlePurchase';
 import rollDice from './rollDice';
 import './App.css'; // Zdefiniuj style w oddzielnym pliku CSS
-import handleChance from "./handleChance";
+import handleChance from './handleChance';
 
 const App = () => {
-  const [players, setPlayers] = useState([
-    new Player("Player 1", 1500),
-    new Player("Player 2", 1500),
-  ]);
+  const [players, setPlayers] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [purchaseDialog, setPurchaseDialog] = useState(false);
-  const [skipDialog, setSkipDialog] = useState(false); // Stan dla skip dialogu
+  const [skipDialog, setSkipDialog] = useState(false); 
   const [currentProperty, setCurrentProperty] = useState(null);
-  const [isDiceDisabled, setIsDiceDisabled] = useState(false); // Nowy stan do blokowania przycisku
+  const [isDiceDisabled, setIsDiceDisabled] = useState(false); 
   const [chanceDialog, setChanceDialog] = useState(false);
   const [chanceCard, setChanceCard] = useState(null);
   const [jailDialog, setJailDialog] = useState(false);
   const [getOutOfJailDialog, setGetOutOfJailDialog] = useState(false);
-  const[taxDialog, setTaxDialog] = useState(false);
+  const [taxDialog, setTaxDialog] = useState(false);
+  const [numPlayers, setNumPlayers] = useState(2); // Liczba graczy (domyślnie 2)
+  const [gameStarted, setGameStarted] = useState(false); // Kontrola rozpoczęcia gry
+  const [playerNames, setPlayerNames] = useState(Array(4).fill('')); // Imiona graczy (maksymalnie 4)
 
-  const currentPlayer = players[currentPlayerIndex];
-  const currentSpace = board[currentPlayer.position];
+  // Funkcja do obsługi zmiany liczby graczy
+  const handleNumPlayersChange = (e) => {
+    const value = parseInt(e.target.value);
+    setNumPlayers(value);
+    setPlayerNames(Array(value).fill('')); // Resetujemy imiona, gdy zmieniamy liczbę graczy
+  };
+
+  // Funkcja do obsługi zmiany imienia gracza
+  const handlePlayerNameChange = (index, name) => {
+    const newPlayerNames = [...playerNames];
+    newPlayerNames[index] = name;
+    setPlayerNames(newPlayerNames);
+  };
+
+  // Funkcja dodawania graczy na podstawie wprowadzonych danych
+  const handleAddPlayers = () => {
+    const newPlayers = [];
+    for (let i = 1; i <= numPlayers; i++) {
+      newPlayers.push(new Player(`Player ${i}`, 1500, i)); // Dodano 0 jako pozycję początkową
+    }
+    setPlayers(newPlayers);
+    setGameStarted(true); // Rozpoczęcie gry po dodaniu graczy
+  };
+
+
+  const currentPlayer = players[currentPlayerIndex] || { name: 'Unknown', position: 0 };
+  const currentSpace = board[currentPlayer.position] || { name: 'Unknown', owner: null };
 
   const handleRollDice = (diceResult) => {
     console.log("Dice rolled:", diceResult);
@@ -76,22 +100,21 @@ const App = () => {
     return (
       <div>
         {players.map((player, index) => {
-          // Filtrujemy nieruchomości dla każdego gracza
           const playerProperties = board.filter(space => space.owner === player);
-  
+
           let positionClass = '';
-          if (player.name === 'Player 1') {
-            positionClass = 'top-left'; // Prawy górny róg
-          } else if (player.name === 'Player 2') {
-            positionClass = 'bottom-left'; // Lewy dolny róg
+          if (player.number === 1 ) {
+            positionClass = 'top-left'; 
+          } else if (player.number === 2) {
+            positionClass = 'bottom-left'; 
           }
           else if (player.name === 'Player 3') {
-            positionClass = 'bottom-left'; // Lewy dolny róg
+            positionClass = 'bottom-left'; 
           }
           else if (player.name === 'Player 4') {
-            positionClass = 'bottom-right'; // Lewy dolny róg
+            positionClass = 'bottom-right'; 
           }
-  
+
           return (
             <div key={index} className={`player-properties ${positionClass}`}>
               <h4>{player.name}'s Properties:</h4>
@@ -110,103 +133,131 @@ const App = () => {
       </div>
     );
   };
-  
 
   return (
     <div>
-      <div>
-        {renderAllPlayersProperties()}
-      </div>
-
-      <div>
-        <h1>Monopoly Game</h1>
-        <h2>Current Player: {currentPlayer.name}</h2>
-        <h3>Current Space: {currentSpace.name}</h3>
-        <p>Balance: ${currentPlayer.balance}</p>
-        <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
-
-        <Dice
-          rollDice={handleRollDice}
-          isDisabled={isDiceDisabled} 
-        />
-
-        {purchaseDialog && (
-          <PurchaseDialog
-            property={currentProperty}
-            onPurchase={(purchase) => {
-              handlePurchase(purchase, players, currentPlayerIndex, currentProperty, setPlayers, setPurchaseDialog, setCurrentProperty);
-              nextPlayer();
-            }}
-            onCancel={() => {
-              setPurchaseDialog(false);
-              setCurrentProperty(null);
-              nextPlayer();
-            }}
+      {!gameStarted ? (
+        <div>
+          <h3>Enter Number of Players:</h3>
+          <input 
+            type="number" 
+            value={numPlayers} 
+            onChange={handleNumPlayersChange}
+            min="2" 
+            max="4"
           />
-        )}
-
-        {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
-        
-        {taxDialog && (
           <div>
-            <h3>You need to pay {currentSpace.cost}$</h3>
-            <h3>Do you want to move on to the next player?</h3>
-            <button
-              onClick={() => {
-                console.log(`${currentPlayer.name} is moving on to the next player.`);
-                setTaxDialog(false);
-                nextPlayer();
-              }}
-            >
-              Yes, move on!
-            </button>
+            <h3>Enter Player Names:</h3>
+            {Array.from({ length: numPlayers }).map((_, index) => (
+              <div key={index}>
+                <input
+                  type="text"
+                  value={playerNames[index]}
+                  onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                  placeholder={`Player ${index + 1}`}
+                />
+              </div>
+            ))}
           </div>
-        )}
-        
-        {jailDialog && (
+          <button onClick={handleAddPlayers}>Start Game</button>
+        </div>
+      ) : (
+        <div>
           <div>
-            <JailDialog />
-            <h3>Do you want to move on to the next player?</h3>
-            <button
-              onClick={() => {
-                console.log(`${currentPlayer.name} is moving on to the next player.`);
-                setJailDialog(false);
-                nextPlayer();
-              }}
-            >
-              Yes, move on!
-            </button>
+            {renderAllPlayersProperties()}
           </div>
-        )}
 
-        {getOutOfJailDialog && (
-          <GetOutOfJailDialog
-            onUseCard={() => {
-              handleGetOutOfJail();
-            }}
-            onStay={() => {
-              console.log(`${currentPlayer.name} chose to stay in jail.`);
-              setGetOutOfJailDialog(false);
-              nextPlayer();
-            }}
-          />
-        )}
-
-        {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog &&(
           <div>
-            <h3>Do you want to move on to the next player?</h3>
-            <button
-              onClick={() => {
-                console.log(`${currentPlayer.name} is skipping to the next player.`);
-                setSkipDialog(false);
-                nextPlayer();
-              }}
-            >
-              Yes, move on!
-            </button>
+            <h1>Monopoly Game</h1>
+            <h2>Current Player: {currentPlayer.name}</h2>
+            <h3>Current Space: {currentSpace.name}</h3>
+            <p>Balance: ${currentPlayer.balance}</p>
+            <p>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</p>
+
+            <Dice
+              rollDice={handleRollDice}
+              isDisabled={isDiceDisabled} 
+            />
+
+            {purchaseDialog && (
+              <PurchaseDialog
+                property={currentProperty}
+                onPurchase={(purchase) => {
+                  handlePurchase(purchase, players, currentPlayerIndex, currentProperty, setPlayers, setPurchaseDialog, setCurrentProperty);
+                  nextPlayer();
+                }}
+                onCancel={() => {
+                  setPurchaseDialog(false);
+                  setCurrentProperty(null);
+                  nextPlayer();
+                }}
+              />
+            )}
+
+            {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
+            
+            {taxDialog && (
+              <div>
+                <h3>You need to pay {currentSpace.cost}$</h3>
+                <h3>Do you want to move on to the next player?</h3>
+                <button
+                  onClick={() => {
+                    console.log(`${currentPlayer.name} is moving on to the next player.`);
+                    setTaxDialog(false);
+                    nextPlayer();
+                  }}
+                >
+                  Yes, move on!
+                </button>
+              </div>
+            )}
+            
+            {jailDialog && (
+              <div>
+                <JailDialog />
+                <h3>Do you want to move on to the next player?</h3>
+                <button
+                  onClick={() => {
+                    console.log(`${currentPlayer.name} is moving on to the next player.`);
+                    setJailDialog(false);
+                    nextPlayer();
+                  }}
+                >
+                  Yes, move on!
+                </button>
+              </div>
+            )}
+
+            {getOutOfJailDialog && (
+              <GetOutOfJailDialog
+                onUseCard={() => {
+                  handleGetOutOfJail();
+                }}
+                onStay={() => {
+                  console.log(`${currentPlayer.name} chose to stay in jail.`);
+                  setGetOutOfJailDialog(false);
+                  nextPlayer();
+                }}
+              />
+            )}
+
+            {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog &&(
+              <div>
+                <h3>Do you want to move on to the next player?</h3>
+                <button
+                  onClick={() => {
+                    console.log(`${currentPlayer.name} is skipping to the next player.`);
+                    setSkipDialog(false);
+                    nextPlayer();
+                  }}
+                >
+                  Yes, move on!
+                </button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

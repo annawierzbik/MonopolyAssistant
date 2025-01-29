@@ -1,6 +1,6 @@
 // Player.js
 export default class Player {
-    constructor(name, balance) {
+    constructor(name, balance, number) {
       this.name = name;  // Imię gracza
       this.balance = balance;  // Saldo gracza
       this.position = 0;  // Pozycja gracza na planszy
@@ -9,6 +9,7 @@ export default class Player {
       this.hasJailCard = false;
       this.railroadCount = 0;
       this.utilityCount = 0;
+      this.number = number;
     }
   
     move(steps) {
