@@ -23,7 +23,7 @@ export default class Player {
       return false;
     }
   
-    payRent(amount) {
+    pay(amount) {
       if (this.balance >= amount) {
         this.balance -= amount;
         return true;
@@ -31,7 +31,7 @@ export default class Player {
       return false;
     }
 
-    getRent(amount){
+    get(amount){
       this.banace += amount;
     }
 

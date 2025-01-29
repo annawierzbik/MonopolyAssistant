@@ -26,6 +26,7 @@ const App = () => {
   const [chanceCard, setChanceCard] = useState(null);
   const [jailDialog, setJailDialog] = useState(false);
   const [getOutOfJailDialog, setGetOutOfJailDialog] = useState(false);
+  const[taxDialog, setTaxDialog] = useState(false);
 
   const currentPlayer = players[currentPlayerIndex];
   const currentSpace = board[currentPlayer.position];
@@ -47,7 +48,8 @@ const App = () => {
       setChanceDialog,
       setChanceCard,
       setJailDialog,
-      setGetOutOfJailDialog
+      setGetOutOfJailDialog,
+      setTaxDialog
     );
   };
 
@@ -124,6 +126,22 @@ const App = () => {
 
         {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
         
+        {taxDialog && (
+          <div>
+            <h3>You need to pay {currentSpace.cost}$</h3>
+            <h3>Do you want to move on to the next player?</h3>
+            <button
+              onClick={() => {
+                console.log(`${currentPlayer.name} is moving on to the next player.`);
+                setTaxDialog(false);
+                nextPlayer();
+              }}
+            >
+              Yes, move on!
+            </button>
+          </div>
+        )}
+        
         {jailDialog && (
           <div>
             <JailDialog />
@@ -153,7 +171,7 @@ const App = () => {
           />
         )}
 
-        {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog &&(
+        {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog &&(
           <div>
             <h3>Do you want to move on to the next player?</h3>
             <button
