@@ -4,8 +4,9 @@ const Dice = ({ rollDice, isDisabled }) => {
   const [dice, setDice] = useState([1, 1]);
 
   const roll = () => {
-    const rollResult = [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
-    //const rollResult = [6, 6];
+    //const rollResult = [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
+    //const rollResult = [4, 3];
+    const rollResult = [2, 0];
     setDice(rollResult);
     rollDice(rollResult);  // Przekazujemy wynik rzutu z powrotem do App.js
   };

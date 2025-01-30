@@ -4,12 +4,14 @@ import Player from './components/Player';
 import board from './boardValues';
 import PurchaseDialog from './components/PurchaseDialog';
 import ChanceDialog from './components/ChanceDialog';
+import CommunityChestDialog from './components/CommunityChestDialog';
 import JailDialog from './components/JailDialog';
 import GetOutOfJailDialog from './components/GetOutOfJailDialog';
 import handlePurchase from './handlePurchase';
 import rollDice from './rollDice';
 import './App.css'; // Zdefiniuj style w oddzielnym pliku CSS
 import handleChance from './handleChance';
+// import handleCommunityChest from './handleCommunityChest';
 
 const App = () => {
   const [players, setPlayers] = useState([]);
@@ -20,6 +22,8 @@ const App = () => {
   const [isDiceDisabled, setIsDiceDisabled] = useState(false); 
   const [chanceDialog, setChanceDialog] = useState(false);
   const [chanceCard, setChanceCard] = useState(null);
+  const [communityChestDialog, setCommunityChestDialog] = useState(false);
+  // const [communityChestCard, setCommunityChestCard] = useState(null);
   const [jailDialog, setJailDialog] = useState(false);
   const [getOutOfJailDialog, setGetOutOfJailDialog] = useState(false);
   const [taxDialog, setTaxDialog] = useState(false);
@@ -71,6 +75,7 @@ const App = () => {
       board,
       setChanceDialog,
       setChanceCard,
+      setCommunityChestDialog,
       setJailDialog,
       setGetOutOfJailDialog,
       setTaxDialog
@@ -79,6 +84,11 @@ const App = () => {
 
   const handleChanceClose = () => {
     handleChance(chanceCard, players, currentPlayerIndex, setPlayers, setChanceDialog, setChanceCard, setIsDiceDisabled, board);
+    nextPlayer();
+  };
+
+  const handleCommunityChestClose = () => {
+    handleChance(chanceCard, players, currentPlayerIndex, setPlayers, setChanceDialog, setCommunityChestDialog, setIsDiceDisabled, board);
     nextPlayer();
   };
 
@@ -196,6 +206,8 @@ const App = () => {
             )}
 
             {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
+
+            {communityChestDialog && <CommunityChestDialog chanceCard={chanceCard} onClose={handleCommunityChestClose} />}
             
             {taxDialog && (
               <div>
@@ -242,7 +254,7 @@ const App = () => {
               />
             )}
 
-            {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog &&(
+            {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog && !communityChestDialog && (
               <div>
                 <div class="dialog">Do you want to move on to the next player?</div>
                 <button class="neon-button-small"

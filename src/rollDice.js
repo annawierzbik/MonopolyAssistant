@@ -1,4 +1,5 @@
 import chance from "./chanceValues";
+import communityChest from "./communitychestValues";
 
 const rollDice = (
   diceResult,
@@ -12,6 +13,7 @@ const rollDice = (
   board,
   setChanceDialog,
   setChanceCard,
+  setCommunityChestDialog,
   setJailDialog,
   setGetOutOfJailDialog,
   setTaxDialog
@@ -80,9 +82,22 @@ const rollDice = (
     const drawnCard = chance[Math.floor(Math.random() * chance.length)]; // Draw a random Chance card
     //const randomIndex = 4;
     //const drawnCard = chance[randomIndex]; // Draw a random Chance card
-    console.log(`Chance card drawn: ${drawnCard.description}`);
+    console.log(`Chance card drawn: ${drawnCard.title}`);
     setChanceCard(drawnCard);
     setChanceDialog(true); // Show the Chance card dialog
+    return;
+
+  } else if (currentSpace.type === "community-chest") {
+    const drawnCard = communityChest[Math.floor(Math.random() * communityChest.length)]; // Draw a random Chance card
+    //const randomIndex = 4;
+    //const drawnCard = communityChest[randomIndex]; // Draw a random Chance card
+    console.log(`Community Chest card drawn: ${drawnCard.title}`);
+
+    setChanceCard(drawnCard);
+    //setChanceDialog(true); // Show the Chance card dialog
+
+    //setCommunityChestCard(drawnCard);
+    setCommunityChestDialog(true); // Show the CommunityChest card dialog
     return;
 
   } else if (currentSpace.type === "go-to-jail") {
