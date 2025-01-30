@@ -63,11 +63,11 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         // Get paid from each player (e.g., "Grand Opera Night - Collect $50 from every player for opening night seats",)
         players.forEach(player => {
           if (player !== currentPlayer) {
-            currentPlayer.balance += communityChest.amount;
-            player.balance -= communityChest.amount;
+            currentPlayer.balance += chanceCard.amount;
+            player.balance -= chanceCard.amount;
           }
         });
-        alert(`${currentPlayer.name} got $${communityChest.amount} from each player.`);
+        alert(`${currentPlayer.name} got $${chanceCard.amount} from each player.`);
         break;
   
       case "propertycharges":
