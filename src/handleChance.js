@@ -58,6 +58,17 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         });
         alert(`${currentPlayer.name} paid $${chanceCard.amount} to each player.`);
         break;
+
+      case "addfundsfromplayers":
+        // Get paid from each player (e.g., "Grand Opera Night - Collect $50 from every player for opening night seats",)
+        players.forEach(player => {
+          if (player !== currentPlayer) {
+            currentPlayer.balance += communityChest.amount;
+            player.balance -= communityChest.amount;
+          }
+        });
+        alert(`${currentPlayer.name} got $${communityChest.amount} from each player.`);
+        break;
   
       case "propertycharges":
         // Pay for houses and hotels
