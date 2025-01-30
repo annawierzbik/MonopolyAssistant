@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dice from './components/Dice';
 import Player from './components/Player';
 import board from './boardValues';
@@ -47,13 +47,18 @@ const App = () => {
 
   // Funkcja dodawania graczy na podstawie wprowadzonych danych
   const handleAddPlayers = () => {
-    const newPlayers = [];
-    for (let i = 1; i <= numPlayers; i++) {
-      newPlayers.push(new Player(`Player ${i}`, 1500, i)); // Dodano 0 jako pozycję początkową
-    }
+    const newPlayers = Array.from({ length: numPlayers }, (_, index) => 
+      new Player(playerNames[index] || `Player ${index + 1}`, 1500, index + 1)
+    );
+  
     setPlayers(newPlayers);
-    setGameStarted(true); // Rozpoczęcie gry po dodaniu graczy
+    setGameStarted(true);
   };
+  
+  // Upewnij się, że playerNames ma odpowiednią długość
+  useEffect(() => {
+    setPlayerNames(new Array(numPlayers).fill(""));
+  }, [numPlayers]);
 
 
   const currentPlayer = players[currentPlayerIndex] || { name: 'Unknown', position: 0 };
@@ -118,10 +123,10 @@ const App = () => {
           } else if (player.number === 2) {
             positionClass = 'top-right'; 
           }
-          else if (player.name === 'Player 3') {
+          else if (player.number === 3) {
             positionClass = 'bottom-right'; 
           }
-          else if (player.name === 'Player 4') {
+          else if (player.number === 4) {
             positionClass = 'bottom-left'; 
           }
 
