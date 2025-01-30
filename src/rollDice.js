@@ -50,7 +50,7 @@ const rollDice = (
     const owner = currentSpace.owner;
     let rent = 0;
     if(currentSpace.type === "property"){
-      rent = currentSpace.rent;
+      rent = currentSpace.rent[0];
     }
     else if(currentSpace.type === "railroad"){
       rent = owner.railroadCount * 25;
