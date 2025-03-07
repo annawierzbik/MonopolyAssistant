@@ -31,12 +31,12 @@ const rollDice = (
     }
     else{
       currentPlayer.inJail = false;
-      setJailDialog(true); // Prompt to move out of jail
+      setJailDialog(true); 
       console.log(`${currentPlayer.name} is no longer in jail.`);
     }
   } else {
     console.log(`${currentPlayer.name} moves ${steps} steps.`);
-    currentPlayer.move(steps); // Move player based on dice roll
+    currentPlayer.move(steps); 
   }
 
   const currentSpace = board[currentPlayer.position];
@@ -45,7 +45,7 @@ const rollDice = (
   if ((currentSpace.type === "property" || currentSpace.type === "railroad" || currentSpace.type === "utility") && !currentSpace.owner) {
     console.log(`${currentSpace.name} is available for purchase.`);
     setCurrentProperty(currentSpace);
-    setPurchaseDialog(true); // Trigger purchase dialog
+    setPurchaseDialog(true); 
   } else if ((currentSpace.type === "property" || currentSpace.type === "railroad" || currentSpace.type === "utility") && currentSpace.owner !== currentPlayer) {
     const owner = currentSpace.owner;
     let rent = 0;
@@ -77,19 +77,17 @@ const rollDice = (
     setSkipDialog(true);
 
   } else if (currentSpace.type === "chance") {
-    const drawnCard = chance[Math.floor(Math.random() * chance.length)]; // Draw a random Chance card
-    //const randomIndex = 4;
-    //const drawnCard = chance[randomIndex]; // Draw a random Chance card
+    const drawnCard = chance[Math.floor(Math.random() * chance.length)]; 
     console.log(`Chance card drawn: ${drawnCard.description}`);
     setChanceCard(drawnCard);
-    setChanceDialog(true); // Show the Chance card dialog
+    setChanceDialog(true); 
     return;
 
   } else if (currentSpace.type === "go-to-jail") {
     console.log(`${currentPlayer.name} landed on Go to Jail. Moving to Jail...`);
     alert("Go to Jail");
     currentPlayer.inJail = true;
-    currentPlayer.position = 10; // Move player to Jail
+    currentPlayer.position = 10; 
     console.log(`${currentPlayer.name} is now in jail.`);
     setSkipDialog(true);
   } else if (currentSpace.type === "tax"){

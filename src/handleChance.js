@@ -6,12 +6,10 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
     switch (chanceCard.action) {
       case "move":
         if (chanceCard.count) {
-          // Move player by specific count (e.g., "Go Back 3 Spaces")
           currentPlayer.position = Math.max(0, currentPlayer.position + chanceCard.count);
         } else {
-          // Move player to specific tile (e.g., "Advance to Boardwalk")
           if (chanceCard.tileid < currentPlayer.position) {
-            currentPlayer.balance += 200; // Collect $200 if passing Go
+            currentPlayer.balance += 200; 
             alert(`${currentPlayer.name} moved to ${board[chanceCard.tileid].name} and collected $200!`);
           } else {
             alert(`${currentPlayer.name} moved to ${board[chanceCard.tileid].name}.`);
@@ -21,12 +19,10 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         break;
   
       case "movenearest":
-        // Move to the nearest Utility or Railroad
         const nearestTile = board.find(tile => tile.group === chanceCard.groupid);
         if (nearestTile) {
           currentPlayer.position = nearestTile.id;
           alert(`${currentPlayer.name} moved to the nearest ${nearestTile.name}.`);
-          // Rent logic if owned
           if (nearestTile.owner && nearestTile.owner !== currentPlayer) {
             const rent = (chanceCard.rentmultiplier || 1) * 10;
             currentPlayer.balance -= rent;
@@ -37,19 +33,16 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         break;
   
       case "addfunds":
-        // Add money (e.g., "Bank pays you dividend of $50")
         currentPlayer.balance += chanceCard.amount;
         alert(`${currentPlayer.name} received $${chanceCard.amount} from a Chance card!`);
         break;
   
       case "removefunds":
-        // Deduct money (e.g., "Pay poor tax of $15")
         currentPlayer.balance -= chanceCard.amount;
         alert(`${currentPlayer.name} lost $${chanceCard.amount} due to a Chance card!`);
         break;
   
       case "removefundstoplayers":
-        // Pay each player (e.g., "Chairman of the Board - Pay each player $50")
         players.forEach(player => {
           if (player !== currentPlayer) {
             currentPlayer.balance -= chanceCard.amount;
@@ -60,7 +53,6 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         break;
   
       case "propertycharges":
-        // Pay for houses and hotels
         const houseCount = currentPlayer.properties.reduce((total, prop) => total + (prop.houses || 0), 0);
         const hotelCount = currentPlayer.properties.reduce((total, prop) => total + (prop.hotels || 0), 0);
         const totalCharge = houseCount * chanceCard.buildings + hotelCount * chanceCard.hotels;
@@ -84,10 +76,10 @@ const handleChance = (chanceCard, players, currentPlayerIndex, setPlayers, setCh
         alert("Unknown Chance Card action.");
     }
   
-    setPlayers([...players]); // Update players
+    setPlayers([...players]); 
     setChanceDialog(false);
     setChanceCard(null);
-    setIsDiceDisabled(false); // Unlock the dice for the next player
+    setIsDiceDisabled(false); 
   };
   
   export default handleChance;

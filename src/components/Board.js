@@ -1,4 +1,3 @@
-// Board.js
 import React from 'react';
 import board from '../boardValues';
 

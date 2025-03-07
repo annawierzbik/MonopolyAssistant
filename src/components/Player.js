@@ -1,4 +1,3 @@
-// Player.js
 export default class Player {
     constructor(name, balance, number) {
       this.name = name;  
