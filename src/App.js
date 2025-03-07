@@ -1,247 +1,262 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate } from "react-router-dom";
-import board from "./board"; // Import the board
-import './App.css';
-
-const GameList = () => {
-  const [games, setGames] = React.useState(
-    JSON.parse(localStorage.getItem("monopolyGames")) || []
-  );
-
-  return (
-    <div className="list">
-      <h1 style={{ fontSize: 35 }} >Monopoly Asistant</h1>
-      <ul style={{ display: "flex", }}>
-        {games.map((game) => (
-          <Link className="listA" to={`/game/${game.id}`}>
-            <button key={game.id}>
-              {game.name}
-            </button>
-          </Link>
-        ))}
-      </ul>
-      <Link to={`/createGame`} style={{marginTop: 25}}>
-        <button>
-          Create New Game
-        </button>
-      </Link>
-    </div>
-  );
-};
-
-///onClick={createGame}
-
-const CreateGame = () => {
-  const [games, setGames] = React.useState(
-    JSON.parse(localStorage.getItem("monopolyGames")) || []
-  );
-  const [gameName, setGameName] = React.useState("");
-  const [playerName, setPlayerName] = React.useState("");
-  const [players, setPlayers] = React.useState([]);
-  const navigate = useNavigate(); // Hook for programmatic navigation
-
-  const addPlayer = () => {
-    if (!playerName.trim()) {
-      alert("Please enter a player name!");
-      return;
-    }
-
-    setPlayers([
-      ...players,
-      { name: playerName, position: 0, money: 1500, properties: [] },
-    ]);
-    setPlayerName(""); // Clear player name input
-  };
-
-  const createGame = () => {
-    if (!gameName.trim()) {
-      alert("Please enter a game name!");
-      return;
-    }
-    if (players.length === 0) {
-      alert("Please add at least one player!");
-      return;
-    }
-
-    const newGame = {
-      id: Date.now(),
-      name: gameName,
-      players: players,
-      active: false,
-      turnIndex: 0,
-    };
-
-    const updatedGames = [...games, newGame];
-    setGames(updatedGames);
-    localStorage.setItem("monopolyGames", JSON.stringify(updatedGames));
-
-    // Navigate to the new game page after saving
-    navigate(`/game/${newGame.id}`);
-
-    // Clear inputs and players list
-    setGameName("");
-    setPlayers([]);
-  };
-
-  return (
-    <div className="gameSetup">
-      <h1>Create a New Game</h1>
-
-      {/* Input for game name */}
-      <input
-        type="text"
-        value={gameName}
-        onChange={(e) => setGameName(e.target.value)}
-        placeholder="Enter game name"
-      />
-      <br />
-
-      {/* Input for player name */}
-      <input
-        type="text"
-        value={playerName}
-        onChange={(e) => setPlayerName(e.target.value)}
-        placeholder="Enter player name"
-      />
-      <button onClick={addPlayer}>Add Player</button>
-
-      {/* Display added players */}
-      <h2>Players:</h2>
-      <ul>
-        {players.map((player, index) => (
-          <li key={index}>{player.name}</li>
-        ))}
-      </ul>
-
-      {/* Button to create the game */}
-      <button onClick={createGame}>Create Game</button>
-
-      {/* Navigation to game list */}
-      <Link to="/">
-        <button>Go to Games</button>
-      </Link>
-    </div>
-  );
-};
-
-
-const Game = () => {
-  const { id } = useParams();
-  const navigate = useNavigate(); // Import useNavigate from react-router-dom
-  const [game, setGame] = React.useState(() => {
-    const games = JSON.parse(localStorage.getItem("monopolyGames")) || [];
-    return games.find((g) => g.id === Number(id)) || null;
-  });
-
-  const rollDice = () => {
-    const diceRoll = Math.floor(Math.random() * 6) + 1;
-    const currentPlayer = game.players[game.turnIndex];
-    const newPosition = (currentPlayer.position + diceRoll) % board.length;
-
-    const tile = board[newPosition];
-    console.log(`${currentPlayer.name} landed on ${tile.name}`);
-
-    let updatedPlayer = { ...currentPlayer, position: newPosition };
-
-    if (tile.type === "property" && !tile.owner) {
-      const wantsToBuy = window.confirm(`${tile.name} is available for $${tile.price}. Buy it?`);
-      if (wantsToBuy && updatedPlayer.money >= tile.price) {
-        updatedPlayer.money -= tile.price;
-        tile.owner = updatedPlayer.name;
-        updatedPlayer.properties = [...updatedPlayer.properties, tile.name];
-      }
-    } else if (tile.type === "property" && tile.owner && tile.owner !== currentPlayer.name) {
-      const owner = game.players.find((p) => p.name === tile.owner);
-      const rent = tile.rent;
-      updatedPlayer.money -= rent;
-      owner.money += rent;
-      alert(`${currentPlayer.name} paid $${rent} in rent to ${tile.owner}.`);
-    } else if (tile.action === "collect_200") {
-      updatedPlayer.money += 200;
-    } else if (tile.action === "pay_tax") {
-      updatedPlayer.money -= 100;
-      alert(`${currentPlayer.name} paid $100 in taxes.`);
-    } else if (tile.action === "chance" || tile.action === "community_chest") {
-      alert(`Draw a ${tile.action.replace("_", " ")} card!`);
-    }
-
-    const updatedPlayers = game.players.map((p, i) =>
-      i === game.turnIndex ? updatedPlayer : p
-    );
-    const updatedGame = {
-      ...game,
-      players: updatedPlayers,
-      turnIndex: (game.turnIndex + 1) % game.players.length,
-    };
-
-    updateGame(updatedGame);
-  };
-
-  const updateGame = (updatedGame) => {
-    const games = JSON.parse(localStorage.getItem("monopolyGames")) || [];
-    const updatedGames = games.map((g) => (g.id === updatedGame.id ? updatedGame : g));
-    localStorage.setItem("monopolyGames", JSON.stringify(updatedGames));
-    setGame(updatedGame);
-  };
-
-  const deleteGame = () => {
-    const games = JSON.parse(localStorage.getItem("monopolyGames")) || [];
-    const updatedGames = games.filter((g) => g.id !== Number(id));
-    localStorage.setItem("monopolyGames", JSON.stringify(updatedGames));
-    alert(`Game "${game.name}" has been deleted.`);
-    navigate("/"); // Redirect back to the main page
-  };
-
-  if (!game) {
-    return <div className="text-center text-red-600">Game not found!</div>;
-  }
-
-  return (
-    <div className="game">
-      <h1>Game: {game.name}</h1>
-      <button onClick={rollDice}>Roll Dice</button>
-      <h2>Players</h2>
-      <ul>
-        {game.players.map((player, index) => (
-          <li key={index}>
-            <div>
-              <span>{player.name}</span>
-              <span>
-                ${player.money} - Position: {player.position}
-              </span>
-            </div>
-            {player.properties.length > 0 && (
-              <div>
-                Properties: {player.properties.join(", ")}
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-      <button onClick={deleteGame} className="bg-red-500 text-white p-2 rounded">
-        Delete Game
-      </button>
-      <Link to="/">
-        <button>Exit Game</button>
-      </Link>
-    </div>
-  );
-};
-
-
+import React, { useState } from 'react';
+import Dice from './components/Dice';
+import Player from './components/Player';
+import board from './boardValues';
+import PurchaseDialog from './components/PurchaseDialog';
+import ChanceDialog from './components/ChanceDialog';
+import JailDialog from './components/JailDialog';
+import GetOutOfJailDialog from './components/GetOutOfJailDialog';
+import handlePurchase from './handlePurchase';
+import rollDice from './rollDice';
+import './App.css'; 
+import handleChance from './handleChance';
 
 const App = () => {
-  return (
-    <Router>
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<GameList />} />
-          <Route path="/game/:id" element={<Game />} />
-          <Route path="/createGame" element={<CreateGame />} />
-        </Routes>
+  const [players, setPlayers] = useState([]);
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const [purchaseDialog, setPurchaseDialog] = useState(false);
+  const [skipDialog, setSkipDialog] = useState(false); 
+  const [currentProperty, setCurrentProperty] = useState(null);
+  const [isDiceDisabled, setIsDiceDisabled] = useState(false); 
+  const [chanceDialog, setChanceDialog] = useState(false);
+  const [chanceCard, setChanceCard] = useState(null);
+  const [jailDialog, setJailDialog] = useState(false);
+  const [getOutOfJailDialog, setGetOutOfJailDialog] = useState(false);
+  const [taxDialog, setTaxDialog] = useState(false);
+  const [numPlayers, setNumPlayers] = useState(2);
+  const [gameStarted, setGameStarted] = useState(false); 
+  const [playerNames, setPlayerNames] = useState(Array(4).fill('')); 
+
+  const handleNumPlayersChange = (e) => {
+    const value = parseInt(e.target.value);
+    setNumPlayers(value);
+    setPlayerNames(Array(value).fill('')); 
+  };
+
+  const handlePlayerNameChange = (index, name) => {
+    const newPlayerNames = [...playerNames];
+    newPlayerNames[index] = name;
+    setPlayerNames(newPlayerNames);
+  };
+
+  const handleAddPlayers = () => {
+    const newPlayers = [];
+    for (let i = 1; i <= numPlayers; i++) {
+      newPlayers.push(new Player(playerNames[i-1], 1500, i)); 
+    }
+    setPlayers(newPlayers);
+    setGameStarted(true); 
+  };
+
+  const currentPlayer = players[currentPlayerIndex] || { name: 'Unknown', position: 0 };
+  const currentSpace = board[currentPlayer.position] || { name: 'Unknown', owner: null };
+
+  const handleRollDice = (diceResult) => {
+    console.log("Dice rolled:", diceResult);
+    setIsDiceDisabled(true);
+
+    rollDice(
+      diceResult,
+      players,
+      currentPlayerIndex,
+      setPlayers,
+      setCurrentPlayerIndex,
+      setPurchaseDialog,
+      setCurrentProperty,
+      setSkipDialog,
+      board,
+      setChanceDialog,
+      setChanceCard,
+      setJailDialog,
+      setGetOutOfJailDialog,
+      setTaxDialog
+    );
+  };
+
+  const handleChanceClose = () => {
+    handleChance(chanceCard, players, currentPlayerIndex, setPlayers, setChanceDialog, setChanceCard, setIsDiceDisabled, board);
+    nextPlayer();
+  };
+
+  const handleGetOutOfJail = () => {
+    console.log(`${currentPlayer.name} is using a "Get Out of Jail" card.`);
+    currentPlayer.inJail = false;
+    currentPlayer.hasJailCard = false;
+    setGetOutOfJailDialog(false);
+    setIsDiceDisabled(false);
+  };
+
+  const nextPlayer = () => {
+    console.log(`Switching to the next player.`);
+    setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length);
+    setIsDiceDisabled(false); 
+  };
+
+  const renderAllPlayersInfo = () => {
+    return (
+      <div>
+        {players.map((player, index) => {
+          const playerProperties = board.filter(space => space.owner === player);
+
+          let positionClass = '';
+          if (player.number === 1 ) {
+            positionClass = 'top-left'; 
+          } else if (player.number === 2) {
+            positionClass = 'top-right'; 
+          }
+          else if (player.number === 3) {
+            positionClass = 'bottom-right'; 
+          }
+          else if (player.number === 4) {
+            positionClass = 'bottom-left'; 
+          }
+
+          return (
+            <div key={index} className={`player-properties ${positionClass}`}>
+              <h4>{player.name ? player.name : `Player ${index+1}`}’s Properties:</h4>
+              {playerProperties.length === 0 ? (
+                <p>{player.name ? player.name : `Player ${index+1}`} doesn't own any properties.</p>
+              ) : (
+                <ul>
+                  {playerProperties.map((property, idx) => (
+                    <li key={idx}>{property.name}</li>
+                  ))}
+                </ul>
+              )}
+              <h4>
+                {player.name ? player.name : `Player ${index+1}`}’s Balance: {player.balance}
+              </h4>
+            </div>
+          );
+        })}
       </div>
-    </Router>
-    
+    );
+  };
+
+  return (
+    <div>
+      {!gameStarted ? (
+        <div>
+          <div class="start-text">Enter Number of Players:</div>
+          <input 
+            type="number" 
+            value={numPlayers} 
+            onChange={handleNumPlayersChange}
+            min="2" 
+            max="4"
+          />
+          <div>
+            <div class="start-text">Enter Player Names:</div>
+            {Array.from({ length: numPlayers }).map((_, index) => (
+              <div key={index}>
+                <input
+                  type="text"
+                  value={playerNames[index]}
+                  onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                  placeholder={`Player ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+          <button class="neon-button" onClick={handleAddPlayers}>Start Game</button>
+        </div>
+      ) : (
+        <div>
+          <div>
+            {renderAllPlayersInfo()}
+          </div>
+
+          <div>
+            <div class = "title">Monopoly Game</div>
+            <div class="game-info">Current Player: {currentPlayer.name}</div>
+            <div class="game-info">Current Space: {currentSpace.name}</div>
+            <div class='game-info'>Owner: {currentSpace.owner ? currentSpace.owner.name : 'none'}</div>
+
+            <Dice
+              rollDice={handleRollDice}
+              isDisabled={isDiceDisabled} 
+            />
+
+            {purchaseDialog && (
+              <PurchaseDialog
+                property={currentProperty}
+                onPurchase={(purchase) => {
+                  handlePurchase(purchase, players, currentPlayerIndex, currentProperty, setPlayers, setPurchaseDialog, setCurrentProperty);
+                  nextPlayer();
+                }}
+                onCancel={() => {
+                  setPurchaseDialog(false);
+                  setCurrentProperty(null);
+                  nextPlayer();
+                }}
+              />
+            )}
+
+            {chanceDialog && <ChanceDialog chanceCard={chanceCard} onClose={handleChanceClose} />}
+            
+            {taxDialog && (
+              <div>
+                <div class="dialog">You need to pay {currentSpace.cost}$</div>
+                <div class="dialog">Do you want to move on to the next player?</div>
+                <button class="neon-button-small"
+                  onClick={() => {
+                    console.log(`${currentPlayer.name} is moving on to the next player.`);
+                    setTaxDialog(false);
+                    nextPlayer();
+                  }}
+                >
+                  Yes, move on!
+                </button>
+              </div>
+            )}
+            
+            {jailDialog && (
+              <div>
+                <JailDialog />
+                <div class="dialog">Do you want to move on to the next player?</div>
+                <button class="neon-button-small"
+                  onClick={() => {
+                    console.log(`${currentPlayer.name} is moving on to the next player.`);
+                    setJailDialog(false);
+                    nextPlayer();
+                  }}
+                >
+                  Yes, move on!
+                </button>
+              </div>
+            )}
+
+            {getOutOfJailDialog && (
+              <GetOutOfJailDialog
+                onUseCard={() => {
+                  handleGetOutOfJail();
+                }}
+                onStay={() => {
+                  console.log(`${currentPlayer.name} chose to stay in jail.`);
+                  setGetOutOfJailDialog(false);
+                  nextPlayer();
+                }}
+              />
+            )}
+
+            {skipDialog && isDiceDisabled && !purchaseDialog && !chanceDialog && !jailDialog && !taxDialog &&(
+              <div>
+                <div class="dialog">Do you want to move on to the next player?</div>
+                <button class="neon-button-small"
+                  onClick={() => {
+                    console.log(`${currentPlayer.name} is skipping to the next player.`);
+                    setSkipDialog(false);
+                    nextPlayer();
+                  }}
+                >
+                  Yes, move on!
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
