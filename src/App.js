@@ -8,7 +8,7 @@ import JailDialog from './components/JailDialog';
 import GetOutOfJailDialog from './components/GetOutOfJailDialog';
 import handlePurchase from './handlePurchase';
 import rollDice from './rollDice';
-import './App.css'; // Zdefiniuj style w oddzielnym pliku CSS
+import './App.css'; 
 import handleChance from './handleChance';
 
 const App = () => {
@@ -23,34 +23,30 @@ const App = () => {
   const [jailDialog, setJailDialog] = useState(false);
   const [getOutOfJailDialog, setGetOutOfJailDialog] = useState(false);
   const [taxDialog, setTaxDialog] = useState(false);
-  const [numPlayers, setNumPlayers] = useState(2); // Liczba graczy (domyślnie 2)
-  const [gameStarted, setGameStarted] = useState(false); // Kontrola rozpoczęcia gry
-  const [playerNames, setPlayerNames] = useState(Array(4).fill('')); // Imiona graczy (maksymalnie 4)
+  const [numPlayers, setNumPlayers] = useState(2);
+  const [gameStarted, setGameStarted] = useState(false); 
+  const [playerNames, setPlayerNames] = useState(Array(4).fill('')); 
 
-  // Funkcja do obsługi zmiany liczby graczy
   const handleNumPlayersChange = (e) => {
     const value = parseInt(e.target.value);
     setNumPlayers(value);
-    setPlayerNames(Array(value).fill('')); // Resetujemy imiona, gdy zmieniamy liczbę graczy
+    setPlayerNames(Array(value).fill('')); 
   };
 
-  // Funkcja do obsługi zmiany imienia gracza
   const handlePlayerNameChange = (index, name) => {
     const newPlayerNames = [...playerNames];
     newPlayerNames[index] = name;
     setPlayerNames(newPlayerNames);
   };
 
-  // Funkcja dodawania graczy na podstawie wprowadzonych danych
   const handleAddPlayers = () => {
     const newPlayers = [];
     for (let i = 1; i <= numPlayers; i++) {
-      newPlayers.push(new Player(`Player ${i}`, 1500, i)); // Dodano 0 jako pozycję początkową
+      newPlayers.push(new Player(playerNames[i-1], 1500, i)); 
     }
     setPlayers(newPlayers);
-    setGameStarted(true); // Rozpoczęcie gry po dodaniu graczy
+    setGameStarted(true); 
   };
-
 
   const currentPlayer = players[currentPlayerIndex] || { name: 'Unknown', position: 0 };
   const currentSpace = board[currentPlayer.position] || { name: 'Unknown', owner: null };
@@ -93,7 +89,7 @@ const App = () => {
   const nextPlayer = () => {
     console.log(`Switching to the next player.`);
     setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length);
-    setIsDiceDisabled(false); // Odblokowanie przycisku na koniec tury
+    setIsDiceDisabled(false); 
   };
 
   const renderAllPlayersInfo = () => {
@@ -108,18 +104,18 @@ const App = () => {
           } else if (player.number === 2) {
             positionClass = 'top-right'; 
           }
-          else if (player.name === 'Player 3') {
+          else if (player.number === 3) {
             positionClass = 'bottom-right'; 
           }
-          else if (player.name === 'Player 4') {
+          else if (player.number === 4) {
             positionClass = 'bottom-left'; 
           }
 
           return (
             <div key={index} className={`player-properties ${positionClass}`}>
-              <h4>{player.name}'s Properties:</h4>
+              <h4>{player.name ? player.name : `Player ${index+1}`}’s Properties:</h4>
               {playerProperties.length === 0 ? (
-                <p>{player.name} doesn't own any properties.</p>
+                <p>{player.name ? player.name : `Player ${index+1}`} doesn't own any properties.</p>
               ) : (
                 <ul>
                   {playerProperties.map((property, idx) => (
@@ -127,9 +123,10 @@ const App = () => {
                   ))}
                 </ul>
               )}
-              <h4>{player.name}'s Balance: {player.balance}</h4>
+              <h4>
+                {player.name ? player.name : `Player ${index+1}`}’s Balance: {player.balance}
+              </h4>
             </div>
-    
           );
         })}
       </div>

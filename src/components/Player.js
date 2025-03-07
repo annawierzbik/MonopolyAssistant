@@ -1,10 +1,10 @@
 // Player.js
 export default class Player {
     constructor(name, balance, number) {
-      this.name = name;  // Imię gracza
-      this.balance = balance;  // Saldo gracza
-      this.position = 0;  // Pozycja gracza na planszy
-      this.properties = [];  // Lista posiadanych nieruchomości
+      this.name = name;  
+      this.balance = balance;  
+      this.position = 0;  
+      this.properties = [];  
       this.inJail = false;
       this.hasJailCard = false;
       this.railroadCount = 0;
@@ -13,7 +13,7 @@ export default class Player {
     }
   
     move(steps) {
-      this.position = (this.position + steps) % 40; // Przesuwamy gracza na planszy
+      this.position = (this.position + steps) % 40; 
     }
   
     buyProperty(property) {
